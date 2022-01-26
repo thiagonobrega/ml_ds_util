@@ -21,6 +21,7 @@ def create_bf(word,bf_len,k,bf_representation='binary'):
         It is important to mention that:
             - pos1 representation might generate filter of diferent lenght, requiring a regularization
     """
+    assert bf_representation in ['binary', 'pos1']
 
     # gerando os ngrams
     ngrams = generate_ngrams(word)
@@ -47,12 +48,14 @@ def create_bf(word,bf_len,k,bf_representation='binary'):
 
     return bf
 
-def jaccard(filter1, filter2):
+
+def jaccard_similarity(filter1, filter2, bf_representation='binary'):
+
     """
         Calculates the jaccard index between 2 bloom filters
 
-        filter1 : bitarray.bitarray
-        filter2 : bitarray.bitarray
+        - filter1 : bitarray.bitarray or list depending on the bf representation
+        - filter2 : bitarray.bitarray or list depending on the bf representation
 
         return : number between 0 and 1
     """
@@ -61,19 +64,24 @@ def jaccard(filter1, filter2):
     # Please check this, chunk of code. It may contain error :p
     # 1 -http://blog.demofox.org/2015/02/08/estimating-set-membership-with-a-bloom-filter/
 
+    assert bf_representation in ['binary', 'pos1']
 
-    inter = (filter1 & filter2).count(True)
-    union = (filter1 | filter2).count(True)
+    if bf_representation=='binary':
+        assert type(filter1) == bitarray.bitarray
+        assert type(filter2) == bitarray.bitarray 
 
+        intersection = (filter1 & filter2).count(True)
+        union = (filter1 | filter2).count(True)
+    elif bf_representation=='pos1':
+        assert type(filter1) == np.ndarray
+        assert type(filter2) == np.ndarray
+        intersection = len(list(set(filter1).intersection(filter2)))
+        union = (len(set(filter1)) + len(set(filter2))) - intersection
+
+    
     if union == 0:
         return 0
 
-    return inter / union
-
-
-def jaccard_similarity(list1, list2):
-    intersection = len(list(set(list1).intersection(list2)))
-    union = (len(set(list1)) + len(set(list2))) - intersection
     return float(intersection) / union
 
 #####
