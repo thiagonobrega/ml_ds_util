@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import nltk
 
@@ -10,66 +11,100 @@ def generate_ngrams(word,ngrams=2,pad=False):
     else:
         grams = nltk.ngrams(word, ngrams)
     saida = []
+
+    # try:
     for gram in grams:
-        saida.append(''.join(gram))
+        saida.append(''.join(str(gram)))
+    # except TypeError:
+    #     print(type(word))
+    #     print(word)
+        # print(list(grams))
+        # print(saida)
+
   
     return saida
 
-def pre_process_raw(df,atts,ngrams=2):
+def pre_process_raw(df,atts,ngrams=2,pad=False):
     """
         Pre-processing raw data: generate the bi-grams to be anonymized
         - remove spaces
 
-        return: the preprocessed dataset and maximum number (maior) of ngram in the dataset
+        return: the preprocessed dataset the mand and maximum number (maior) of ngram in the dataset
     """
     ldf = []
     maior = 0
+    soma_media = 0
+    count = 0
+
     for row in df.iterrows():
         id = row[1][0]
         qid = ''
         for i in range(1,len(atts)):
             try:
                 for w in row[1][i].split(): #removendo espacos
-                    qid += w
+                    qid += str(w)
             except AttributeError:
                 qid += str(row[1][i])
         
         #
-        ngrams = generate_ngrams(qid,ngrams=ngrams,pad=False)
-        if len(ngrams) >  maior:
-            maior = len(ngrams)
+        qid = str(qid)
+        
+        n_grams = generate_ngrams(qid,ngrams=ngrams,pad=pad)
+        soma_media += len(n_grams)
+        count += 1
 
-        ldf.append([id,ngrams])
+        if len(n_grams) >  maior:
+            maior = len(n_grams)
 
-    return ldf, maior
+        ldf.append([id,n_grams])
 
-def ler_e_extrair_sample(df1,df2,sample_size,percentual_nao_duplicada=0.1,
-                         sample_from_same=False,return_raw_sample=False,
-                         atts=['voter_id','first_name','last_name','gender','street_address']):
+    media_ngram = int(soma_media/count)
+    return ldf, media_ngram, maior
+
+def extract_sample(df,sample_size,duplicate_rate=0.1,
+                    return_raw_sample=False,
+                    atts='all'):
     """
-        sample and extract the from one dataset
-    """
-  
-    ss1 = df1.sample(sample_size)
-    l1 = int(sample_size*percentual_nao_duplicada)
-    l2 = sample_size - l1
+        Extract a sample from a dataset
+        - sample_size : number of records
+        - duplicate_rate: percent of duplicated (0...1)
+        - return_raw_sample (default False): return the raw sample, for debug.
+        - atts
 
-    ss2 = []
-    if sample_from_same:
-        ss2 = pd.concat([df1.sample(l2), ss1.sample(l1)])
-    else:
-        ss2 = pd.concat([df2.sample(l2), ss1.sample(l1)])
+        return df_a,df_b,mean_ngram,max_ngram ( raw_dfa, raw_dfb )
+    """
+    assert duplicate_rate <= 1
+    assert duplicate_rate > 0
   
+    # TODO: bom ponto para introduzir o algoritmo de krimp aqui
+    
+    num_of_records_df_a = sample_size
+
+    num_of_duplicated_records_df_b = int(sample_size * duplicate_rate)
+    num_of_no_duplicated_records_df_b = sample_size - num_of_duplicated_records_df_b
+    
+    df_a = df.sample(sample_size)
+    df_b = pd.concat([df.sample(num_of_no_duplicated_records_df_b),
+                        df_a.sample(num_of_no_duplicated_records_df_b)
+                    ])
+
     #seleciona attributos
-    ss1 = ss1[atts]
-    ss2 = ss2[atts]
+    if type(atts) != list:
+        atts = list(df_a.columns)
+    else:
+        #filter attributes
+        df_a = df_a[atts]
+        df_b = df_b[atts]
 
-    sp1 , s1m = pre_process_raw(ss1,atts)
-    sp2 , s2m = pre_process_raw(ss2,atts)
-
-    max_ngram = max(s1m,s2m)
+    #preprocessa os dados
+    df_a_proc , df_a_mean_ngram, df_a_max_ngram = pre_process_raw(df_a,atts)
+    df_b_proc , df_b_mean_ngram, df_b_max_ngram = pre_process_raw(df_b,atts)
+    #max and mean number of ngram in the sample
+    max_ngram = max(df_a_max_ngram,df_a_max_ngram)
+    mean_ngram = int( (df_a_mean_ngram+df_b_mean_ngram)/2 )
 
     if return_raw_sample:
-        return sp1,sp2,max_ngram,ss1,ss2
+        return df_a_proc,df_b_proc,mean_ngram,max_ngram,df_a,df_b
     else:
-        return sp1,sp2,max_ngram
+        return df_a_proc,df_b_proc,mean_ngram,max_ngram
+
