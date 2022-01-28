@@ -61,13 +61,15 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
     media_ngram = int(soma_media/count)
     return ldf, media_ngram, maior
 
-def extract_sample(df,sample_size,duplicate_rate=0.1,
+def extract_sample(df1,sample_size,duplicate_rate=0.1,
+                    df2=[],
                     return_raw_sample=False,
                     atts='all'):
     """
-        Extract a sample from a dataset
+        Extract a sample from a dataset (or a pair of dataset, if df2 parameter is set)
         - sample_size : number of records
         - duplicate_rate: percent of duplicated (0...1)
+        - df2: the second dataset to be extracted
         - return_raw_sample (default False): return the raw sample, for debug.
         - atts
 
@@ -83,10 +85,15 @@ def extract_sample(df,sample_size,duplicate_rate=0.1,
     num_of_duplicated_records_df_b = int(sample_size * duplicate_rate)
     num_of_no_duplicated_records_df_b = sample_size - num_of_duplicated_records_df_b
     
-    df_a = df.sample(sample_size)
-    df_b = pd.concat([df.sample(num_of_no_duplicated_records_df_b),
-                        df_a.sample(num_of_no_duplicated_records_df_b)
-                    ])
+    df_a = df1.sample(sample_size)
+    if len(df2) == 0:
+        df_b = pd.concat([df1.sample(num_of_no_duplicated_records_df_b),
+                            df_a.sample(num_of_no_duplicated_records_df_b)
+                        ])
+    else:
+        df_b = pd.concat([df2.sample(num_of_no_duplicated_records_df_b),
+                            df_a.sample(num_of_no_duplicated_records_df_b)
+                        ])
 
     #seleciona attributos
     if type(atts) != list:
