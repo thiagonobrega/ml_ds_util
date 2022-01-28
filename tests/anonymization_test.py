@@ -22,6 +22,8 @@ class AnonimizationTest(unittest.TestCase):
 
         self.assertAlmostEqual(sim_b,sim_pos)
         self.assertEqual(sim_b,sim_pos)
+
+        self.assertGreater(jaccard_similarity(bfa_b,bfb_b,bf_representation='binary'),.4)
         
 
 if __name__ == '__main__':
