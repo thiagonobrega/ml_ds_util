@@ -84,14 +84,15 @@ def jaccard_similarity(filter1, filter2, bf_representation='binary'):
 
     return float(intersection) / union
 
-#####
-def completar_bf(bf,tamanho_max):
-  '''
-    Completa o filtro zeros ao final
-  '''
-  try:
-    z = np.zeros(tamanho_max-len(bf))
-  except ValueError:
-    print(len(bf))
-    print(tamanho_max)
-  return np.concatenate((bf,z))
+
+def fill_pos_bf(bf,new_bf_length):
+    """
+        To this representation be used in ML aplication it should have the same length.
+        This method fills the pos bf with zeros at the end 
+    """
+    try:
+        z = np.zeros(new_bf_length-len(bf))
+    except ValueError:
+        print(len(bf))
+        print(new_bf_length)
+    return np.concatenate((bf,z))
