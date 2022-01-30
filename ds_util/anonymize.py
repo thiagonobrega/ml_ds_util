@@ -156,10 +156,10 @@ def fill_all_posbf(ds,len_max):
         bf2 = fill_pos_bf(s[i][3],len_max)
         l.append(bf1)
         r.append(bf2)
-    
-    label.append(s[i][5])
+        label.append(s[i][5])
+        
     x = [np.asarray(l),np.asarray(r)]
-    y = np.asarray(label)
+    y =  np.asarray(ds.label)
 
     return x,y
 
