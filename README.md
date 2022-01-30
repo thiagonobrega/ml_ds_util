@@ -1,5 +1,8 @@
+# Basich dataset operation libs
 
-## Enviroment setup
+This code aims to execute the basic datasets operations (e.g., read and anonymize the records) to my Ph.D. research.
+
+## Setup
 
 - enable virtual env
     ```python -m venv .venv```
@@ -9,7 +12,4 @@
 
 - install requirements
   ```pip install -r requirements.txt```
-
-
-
 

@@ -3,3 +3,4 @@ __pycache__/*.pyc
 .vscode/settings.json
 */__pycache__/*.pyc
 .pylintrc
+notas/*.txt
