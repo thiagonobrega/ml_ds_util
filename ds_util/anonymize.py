@@ -136,6 +136,29 @@ def extract_sample_from_anonymized(rdf,sample_method='random1',
                     else: # remove um sample
                         temp = sample_cand.sample(num_of_negative_example_per_sample)
                         sample_df.append(temp.to_numpy()[0])
+        else:
+          #colocar exemplos negativos
+          pass
+          if sample_method == 'random1':
+            unique_sim = df_nm.sim.unique()
+            sample_unique_sim = np.random.choice(unique_sim,num_of_random_sample)
+            for i in sample_unique_sim:
+              s = df_nm[df_nm.sim ==i].sample(num_of_negative_example_per_sample,replace=True)
+              sample_df.append(s.to_numpy()[0])
+          elif sample_method == 'maxq13':
+            sim_values = df_nm.sim.unique()
+            q1 = get_nearest_value(sim_values, df_nm.sim.quantile(0.25))
+            me = get_nearest_value(sim_values, df_nm.sim.median())
+            q3 = get_nearest_value(sim_values, df_nm.sim.quantile(0.75))
+            ma = get_nearest_value(sim_values, df_nm.sim.max())
+
+            for v in [q1,me,q3,ma]:
+              sample_cand = df_nm[df_nm.sim == q3]
+              if len(sample_cand) <= num_of_negative_example_per_sample: # caso o sample_cand nao tenha o numero suficiente de amostras
+                sample_df.append(sample_cand.to_numpy()[0])
+              else: # remove um sample
+                temp = sample_cand.sample(num_of_negative_example_per_sample)
+                sample_df.append(temp.to_numpy()[0])
   
     sample_df = pd.DataFrame(sample_df)
     sample_df.columns = ['id1','id2','bf1','bf2','sim','label']
