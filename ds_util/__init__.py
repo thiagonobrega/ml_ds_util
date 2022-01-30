@@ -88,11 +88,11 @@ def extract_sample(df1,sample_size,duplicate_rate=0.1,
     df_a = df1.sample(sample_size)
     if len(df2) == 0:
         df_b = pd.concat([df1.sample(num_of_no_duplicated_records_df_b),
-                            df_a.sample(num_of_no_duplicated_records_df_b)
+                            df_a.sample(num_of_duplicated_records_df_b) #corrigido
                         ])
     else:
         df_b = pd.concat([df2.sample(num_of_no_duplicated_records_df_b),
-                            df_a.sample(num_of_no_duplicated_records_df_b)
+                            df_a.sample(num_of_duplicated_records_df_b)
                         ])
 
     #seleciona attributos
