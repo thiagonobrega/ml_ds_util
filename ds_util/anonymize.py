@@ -50,9 +50,13 @@ def anonymize_dataset(ldf,bf_len,k,bf_representation='binary'):
 
 #   return r
 
-def rank_dataset(df_a,df_b,bf_representation='binary'):
+def rank_dataset(df_a,df_b,bf_representation='binary', bit_power=1):
   '''
-    Sort the dataset according to the jaccard simillarity
+    Sort the dataset according to the jaccard simillarity. This method also change
+    binary bf represation. It convert the bitaary into np.array(uint8) to be used 
+    as input to the classifiers
+    
+    - bit_power: (default=1), this method is used amplify the power of the signal in the bloomfilter
 
     return a dataset with ["id1","id2","bf1","bf2","sim","label"]
   '''
@@ -68,6 +72,14 @@ def rank_dataset(df_a,df_b,bf_representation='binary'):
       bf2 = df_b[j][1]
 
       sim = jaccard_similarity(bf1,bf2,bf_representation=bf_representation)
+
+      
+      if bf_representation == 'binary':
+
+        bf1 = np.unpackbits(bf1)
+        if bit_power!=1:
+          bf1 = bf1 * bit_power
+          bf2 = bf2 * bit_power
 
 
       linha = [id1,id2,bf1,bf2,sim]
