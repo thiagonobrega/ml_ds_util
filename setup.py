@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="phd_dataset_util",
-    version="0.1.0",
+    version="0.1.1",
     author="Thiago Nóbrega",
     author_email="thiagonobrega@gmail.com",
-    description="A package that aims to execute the basic dataprocessing from my phd experiments",
+    description="A package that aims to execute the basic data processing from my phd experiments",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/thiaonobrega/ml_ds_util",

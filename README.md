@@ -1,6 +1,6 @@
 # Basich dataset operation libs
 
-This code aims to execute the basic datasets operations (e.g., read and anonymize the records) to my Ph.D. research.
+This code aims to execute the basic datasets operations (e.g., read and anonymize the records) in my Ph.D. research.
 
 ## Setup
 
