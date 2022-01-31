@@ -5,8 +5,8 @@ import pandas as pd
 
 import nltk
 
-from util import get_nearest_value
-from bloomfilter import create_bf, jaccard_similarity, fill_pos_bf
+from ds_util.util import get_nearest_value
+from ds_util.bloomfilter import create_bf, jaccard_similarity, fill_pos_bf
 
 
 def anonymize_dataset(ldf,bf_len,k,bf_representation='binary'):

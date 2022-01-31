@@ -1,5 +1,5 @@
 import unittest
-from bloomfilter import create_bf, jaccard_similarity
+from ds_util.bloomfilter import create_bf, jaccard_similarity
 
 class AnonimizationTest(unittest.TestCase):
 

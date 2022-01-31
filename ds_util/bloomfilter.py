@@ -93,6 +93,6 @@ def fill_pos_bf(bf,new_bf_length):
     try:
         z = np.zeros(new_bf_length-len(bf))
     except ValueError:
-        print(len(bf))
+        print(len(bf)) #corrigir aqui quado for menor
         print(new_bf_length)
     return np.concatenate((bf,z))
