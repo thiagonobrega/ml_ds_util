@@ -77,6 +77,8 @@ def rank_dataset(df_a,df_b,bf_representation='binary', bit_power=1):
       if bf_representation == 'binary':
 
         bf1 = np.unpackbits(bf1)
+        bf2 = np.unpackbits(bf2)
+
         if bit_power!=1:
           bf1 = bf1 * bit_power
           bf2 = bf2 * bit_power
