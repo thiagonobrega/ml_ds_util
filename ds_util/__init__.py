@@ -44,10 +44,11 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
                 for w in row[1][i].split(): #removendo espacos
                     qid += str(w)
             except AttributeError:
-                qid += str(row[1][i])
+                qid += str(row[1][i]) + ' '
         
         #
         qid = str(qid)
+        qid = qid[:-1] # recupera ate o ultimo espaco
         
         n_grams = generate_ngrams(qid,ngrams=ngrams,pad=pad)
         soma_media += len(n_grams)
