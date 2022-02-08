@@ -56,7 +56,7 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
         if len(n_grams) >  maior:
             maior = len(n_grams)
 
-        ldf.append([id,n_grams])
+        ldf.append([id,qid])
 
     media_ngram = int(soma_media/count)
     return ldf, media_ngram, maior
@@ -77,10 +77,6 @@ def extract_sample(df1,sample_size,duplicate_rate=0.1,
     """
     assert duplicate_rate <= 1
     assert duplicate_rate > 0
-  
-    # TODO: bom ponto para introduzir o algoritmo de krimp aqui
-    
-    num_of_records_df_a = sample_size
 
     num_of_duplicated_records_df_b = int(sample_size * duplicate_rate)
     num_of_no_duplicated_records_df_b = sample_size - num_of_duplicated_records_df_b
