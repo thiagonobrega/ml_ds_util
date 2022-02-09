@@ -7,14 +7,14 @@ def generate_ngrams(word,ngrams=2,pad=False):
     Generate (plain ngrams) of a string (word)
     """
     if pad:
-        grams =  nltk.ngrams(word, ngrams,pad_left=True, pad_right=True,left_pad_symbol='$',right_pad_symbol='$')
+        grams =  nltk.ngrams(str(word), ngrams,pad_left=True, pad_right=True,left_pad_symbol='$',right_pad_symbol='$')
     else:
-        grams = nltk.ngrams(word, ngrams)
+        grams = nltk.ngrams(str(word), ngrams)
     saida = []
 
     # try:
     for gram in grams:
-        saida.append(''.join(str(gram)))
+        saida.append(''.join(gram))
     # except TypeError:
     #     print(type(word))
     #     print(word)
