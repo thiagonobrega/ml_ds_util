@@ -6,7 +6,7 @@ import numpy as np
 from ds_util import generate_ngrams
 
 
-def create_bf(word,bf_len,k,bf_representation='binary'):
+def create_bf(word,bf_len,k,bf_representation='binary',num_ngrams=2):
     """
         For a given string (representing a record), this method creates a new bloom filter.
 
@@ -24,7 +24,7 @@ def create_bf(word,bf_len,k,bf_representation='binary'):
     assert bf_representation in ['binary', 'pos1']
 
     # gerando os ngrams
-    ngrams = generate_ngrams(word)
+    ngrams = generate_ngrams(word,ngrams=num_ngrams)
     bf = []
 
     #filtro vazio

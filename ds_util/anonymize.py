@@ -125,7 +125,7 @@ def extract_sample_from_anonymized(rdf,sample_method='random1',
         df_m = rdf[(rdf.id1 == id) & (rdf.label == 1)]  # match
 
         if len(df_m) != 0:
-            sample_df.append(df_m.to_numpy()[0])
+            sample_df.append(df_m.to_numpy()[0]) # remover
             #add no match sample 
             if sample_method == 'random1':
                 unique_sim = df_nm.sim.unique()
