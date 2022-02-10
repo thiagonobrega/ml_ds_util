@@ -112,7 +112,7 @@ def extract_sample(df1,sample_size,duplicate_rate=0.1,
 
     #preprocessa os dados
     df_a_proc , df_a_mean_ngram, df_a_max_ngram = pre_process_raw(df_a,atts,return_type=return_type)
-    df_b_proc , df_b_mean_ngram, df_b_max_ngram = pre_process_raw(df_b,atts.return_type=return_type)
+    df_b_proc , df_b_mean_ngram, df_b_max_ngram = pre_process_raw(df_b,atts,return_type=return_type)
     #max and mean number of ngram in the sample
     max_ngram = max(df_a_max_ngram,df_a_max_ngram)
     mean_ngram = int( (df_a_mean_ngram+df_b_mean_ngram)/2 )
