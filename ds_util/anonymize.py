@@ -9,7 +9,7 @@ from ds_util.util import get_nearest_value
 from ds_util.bloomfilter import create_bf, jaccard_similarity, fill_pos_bf
 
 
-def anonymize_dataset(ldf,bf_len,k,bf_representation='binary'):
+def anonymize_dataset(ldf,bf_len,k,bf_representation='binary',num_ngrams=2):
   """
     Aanonymize a dataset with a bloomfilter. 
 
@@ -23,7 +23,7 @@ def anonymize_dataset(ldf,bf_len,k,bf_representation='binary'):
   
   for row in ldf:
     id = row[0]
-    bf = create_bf(row[1],bf_len,k,bf_representation=bf_representation)
+    bf = create_bf(row[1],bf_len,k,bf_representation=bf_representation,num_ngrams=num_ngrams)
     saida.append([id,bf])
   
   return saida

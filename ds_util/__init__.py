@@ -25,13 +25,16 @@ def generate_ngrams(word,ngrams=2,pad=False):
   
     return saida
 
-def pre_process_raw(df,atts,ngrams=2,pad=False):
+def pre_process_raw(df,atts,ngrams=2,pad=False,return_type='qid'):
     """
         Pre-processing raw data: generate the bi-grams to be anonymized
         - remove spaces
+        return_type : qid or ngrams
 
         return: the preprocessed dataset the mand and maximum number (maior) of ngram in the dataset
     """
+    assert return_type in ['ngrams','qid']
+
     ldf = []
     maior = 0
     soma_media = 0
@@ -43,13 +46,14 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
         for i in range(1,len(atts)):
             try:
                 for w in row[1][i].split(): #removendo espacos
-                    qid += str(w)
+                    # qid += str(w)
+                    qid += w
             except AttributeError:
-                qid += str(row[1][i]) + ' '
+                qid += str(row[1][i])
         
         #
-        qid = str(qid)
-        qid = qid[:-1] # recupera ate o ultimo espaco
+        # qid = str(qid)
+        # qid = qid[:-1] # recupera ate o ultimo espaco
         
         n_grams = generate_ngrams(qid,ngrams=ngrams,pad=pad)
         soma_media += len(n_grams)
@@ -58,7 +62,10 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
         if len(n_grams) >  maior:
             maior = len(n_grams)
 
-        ldf.append([id,qid])
+        if return_type == 'ngrams':
+            ldf.append([id,n_grams])
+        else:
+            ldf.append([id,qid])
 
     media_ngram = int(soma_media/count)
     return ldf, media_ngram, maior
@@ -66,7 +73,9 @@ def pre_process_raw(df,atts,ngrams=2,pad=False):
 def extract_sample(df1,sample_size,duplicate_rate=0.1,
                     df2=[],
                     return_raw_sample=False,
-                    atts='all'):
+                    return_type='qid',
+                    atts='all'
+                ):
     """
         Extract a sample from a dataset (or a pair of dataset, if df2 parameter is set)
         - sample_size : number of records
@@ -102,8 +111,8 @@ def extract_sample(df1,sample_size,duplicate_rate=0.1,
         df_b = df_b[atts]
 
     #preprocessa os dados
-    df_a_proc , df_a_mean_ngram, df_a_max_ngram = pre_process_raw(df_a,atts)
-    df_b_proc , df_b_mean_ngram, df_b_max_ngram = pre_process_raw(df_b,atts)
+    df_a_proc , df_a_mean_ngram, df_a_max_ngram = pre_process_raw(df_a,atts,return_type=return_type)
+    df_b_proc , df_b_mean_ngram, df_b_max_ngram = pre_process_raw(df_b,atts.return_type=return_type)
     #max and mean number of ngram in the sample
     max_ngram = max(df_a_max_ngram,df_a_max_ngram)
     mean_ngram = int( (df_a_mean_ngram+df_b_mean_ngram)/2 )
