@@ -7,9 +7,10 @@ def generate_ngrams(word,ngrams=2,pad=False):
     Generate (plain ngrams) of a string (word)
     """
     if pad:
-        grams =  nltk.ngrams(str(word), ngrams,pad_left=True, pad_right=True,left_pad_symbol='$',right_pad_symbol='$')
+        # removi o str(word)
+        grams =  nltk.ngrams(word, ngrams,pad_left=True, pad_right=True,left_pad_symbol='$',right_pad_symbol='$')
     else:
-        grams = nltk.ngrams(str(word), ngrams)
+        grams = nltk.ngrams(word, ngrams)
     saida = []
 
     # try:
