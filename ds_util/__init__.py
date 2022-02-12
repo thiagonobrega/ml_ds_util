@@ -71,7 +71,7 @@ def pre_process_raw(df,atts,ngrams=2,pad=False,return_type='qid'):
     return ldf, media_ngram, maior
 
 def extract_sample(df1,sample_size,duplicate_rate=0.1,
-                    df2=[],
+                    df2=False,
                     return_raw_sample=False,
                     return_type='qid',
                     atts='all'
@@ -93,7 +93,7 @@ def extract_sample(df1,sample_size,duplicate_rate=0.1,
     num_of_no_duplicated_records_df_b = sample_size - num_of_duplicated_records_df_b
     
     df_a = df1.sample(sample_size)
-    if len(df2) == 0:
+    if df2 == False:
         df_b = pd.concat([df1.sample(num_of_no_duplicated_records_df_b),
                             df_a.sample(num_of_duplicated_records_df_b) #corrigido
                         ])
